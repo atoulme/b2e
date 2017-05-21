@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="b2e.buildrNature"
+         name="Buildr Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="b2e.nature.BuildrNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Buildr Project Nature commands"
+            id="b2e.buildrNature.category">
+      </category>
+      <command
+            name="Add/RemoveBuildr Project Nature"
+            defaultHandler="b2e.nature.AddRemoveBuildrNatureHandler"
+            categoryId="b2e.buildrNature.category"
+            id="b2e.addRemoveBuildrNature">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="b2e.addRemoveBuildrNature"
+               label="Add Buildr Nature"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                           <not>
+                        <test
+                              value="b2e.buildrNature"
+                              property="org.eclipse.core.resources.projectNature">
+                        </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="b2e.addRemoveBuildrNature"
+               label="Remove Buildr Nature"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                           <test
+                                 value="b2e.buildrNature"
+                                 property="org.eclipse.core.resources.projectNature">
+                           </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/buildr.gif"
+            id="b2e.natureImage"
+            natureId="b2e.buildrNature">
+      </image>
+   </extension>
+   <extension point="org.eclipse.ui.decorators">
+     <decorator
+           adaptable="true"
+           icon="icons/buildr.gif"
+           id="b2e.buildrDecorator"
+           label="Buildr Decorator"
+           lightweight="true"
+           location="TOP_LEFT"
+           state="true">
+       <enablement>
+          <or>
+            <objectState name="label" value="Buildr Dependencies"/>
+          </or>
+       </enablement>
+     </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="b2e.nature.BuildrClasspathContainerInitializer"
+            id="b2e.BUILDR_CONTAINER">
+      </classpathContainerInitializer>
+   </extension>
+   <extension point="org.eclipse.jdt.core.classpathVariableInitializer">
+      <classpathVariableInitializer variable="M2_REPO" readOnly="true"
+          class="b2e.nature.M2RepoClasspathVariableInitializer"/>
+   </extension>
+</plugin>
